@@ -19,7 +19,7 @@ public class EmailSenderServiceImpl implements EmailSenderService {
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setTo(to);
         msg.setText(message);
-        msg.setFrom("danikcheban2007@gmail.com");
+        msg.setFrom(""); //enter your email
         msg.setSubject("Spring messenger service application");
         javaMailSender.send(msg);
     }
