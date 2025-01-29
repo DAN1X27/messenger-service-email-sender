@@ -28,7 +28,7 @@ public class KafkaEmailListener {
     public void sendBanUserMessage(ConsumerRecord<String, String> record) {
         emailSenderServiceImpl.sendMessage(
                 record.key(),
-                "Your account with email:" + record.key() + " - has been banned for reason: " + record.value()
+                "Your account with email: " + record.key() + " - has been banned for reason: " + record.value()
         );
     }
 
