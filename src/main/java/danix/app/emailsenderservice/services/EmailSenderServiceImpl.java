@@ -1,8 +1,13 @@
 package danix.app.emailsenderservice.services;
 
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +18,8 @@ public class EmailSenderServiceImpl {
     
     private final JavaMailSender javaMailSender;
 
+    private static final Logger logger = LoggerFactory.getLogger(EmailSenderServiceImpl.class);
+
     @Autowired
     public EmailSenderServiceImpl(@Value("${spring.mail.username}") String from, JavaMailSender javaMailSender) {
         FROM = from; 
@@ -20,11 +27,16 @@ public class EmailSenderServiceImpl {
     }
 
     public void sendMessage(String to, String message) {
-        SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setTo(to);
-        msg.setText(message);
-        msg.setFrom(FROM);
-        msg.setSubject("Spring messenger service application");
-        javaMailSender.send(msg);
+        try {
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            mimeMessage.setFrom(FROM);
+            mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+            mimeMessage.setSubject("Spring messenger service application");
+            mimeMessage.setContent("<h1>" + message + "</h1>", "text/html;charset=UTF-8");
+            javaMailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            logger.error(e.getMessage());
+        }
+
     }
 }

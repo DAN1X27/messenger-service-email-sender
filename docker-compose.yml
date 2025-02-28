@@ -7,6 +7,7 @@ services:
       SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS: kafka:9092
     networks:
       - messenger-service-net
+    restart: unless-stopped
 
   zookeeper:
     image: wurstmeister/zookeeper
