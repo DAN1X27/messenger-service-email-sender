@@ -1,5 +1,6 @@
 package danix.app.emailsenderservice.services;
 
+import jakarta.activation.DataContentHandler;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -32,7 +33,15 @@ public class EmailSenderServiceImpl {
             mimeMessage.setFrom(FROM);
             mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
             mimeMessage.setSubject("Spring messenger service application");
-            mimeMessage.setContent("<h1>" + message + "</h1>", "text/html;charset=UTF-8");
+            mimeMessage.setContent(
+                            """
+                                <body style = "color: white; text-align: center">
+                                        <h1 style = "color: #000720;">Spring messenger service</h1>
+                                        <p style="background-color: #000720; font-size: 25px; display: inline;">""" + message + """
+                                        </p>
+                                </body>
+                            """,
+                    "text/html;charset=UTF-8");
             javaMailSender.send(mimeMessage);
         } catch (MessagingException e) {
             logger.error(e.getMessage());
